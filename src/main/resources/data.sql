@@ -1,0 +1,10 @@
+INSERT INTO People (firstName, lastName, age, email) VALUES ('Marie', 'Klefas', 22, 'klefasha@yandex.ru');
+INSERT INTO People (firstName, lastName, age, email) VALUES ('Pavel', 'Romanov', 30, 'romanov_pavel@gmail.com');
+INSERT INTO People (firstName, lastName, age, email) VALUES ('Alena', 'Spring', 27, 'alena_cute@gmail.com');
+INSERT INTO People (firstName, lastName, age, email) VALUES ('Helen', 'Woolf', 20, 'helen_hell@gmail.com');
+INSERT INTO People (firstName, lastName, age, email) VALUES ('Gleb', 'Ivanov', 25, 'gleb_or_ivan_whatever@yandex.ru');
+INSERT INTO People (firstName, lastName, age, email) VALUES ('Kate', 'Woodston', 33, 'woody@gmail.com');
+INSERT INTO People (firstName, lastName, age, email) VALUES ('Rose', 'Hale', 24, 'rosalie@gmail.com');
+INSERT INTO People (firstName, lastName, age, email) VALUES ('Madison', 'Fisher', 29, 'fishgirl@gmail.com');
+INSERT INTO People (firstName, lastName, age, email) VALUES ('Klaus', 'Mikaelson', 35, 'vampire@gmail.com');
+INSERT INTO People (firstName, lastName, age, email) VALUES ('Bennet', 'Springrose', 19, 'bennyrose@gmail.com');
