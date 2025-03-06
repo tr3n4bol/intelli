@@ -68,4 +68,29 @@ public class TableController {
         return "redirect:/";
     }
 
+    @GetMapping("/edit/{id}")
+    public String editPersonForm(@PathVariable Long id, Model model) {
+        People person = peopleRepo.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid person Id:" + id));
+        model.addAttribute("person", person);
+        return "edit_person";
+    }
+
+    @PostMapping("/edit/{id}")
+    public String editPerson(@PathVariable Long id, @ModelAttribute("person") People updatedPerson) {
+        // Находим существующую запись по ID
+        People existingPerson = peopleRepo.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid person Id:" + id));
+
+        // Обновляем поля существующей записи
+        existingPerson.setFirstName(updatedPerson.getFirstName());
+        existingPerson.setLastName(updatedPerson.getLastName());
+        existingPerson.setAge(updatedPerson.getAge());
+        existingPerson.setEmail(updatedPerson.getEmail());
+
+        // Сохраняем обновленную запись
+        peopleRepo.save(existingPerson);
+        return "redirect:/";
+    }
+
 }

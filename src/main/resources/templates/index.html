@@ -29,6 +29,9 @@
         <td th:text="${pers.lastName}"></td>
         <td th:text="${pers.age}"></td>
         <td th:text="${pers.email}"></td>
+        <td>
+            <a th:href="@{/edit/{id}(id=${pers.id})}"><button type="button">Edit</button></a>
+        </td>
     </tr>
     </tbody>
 </table>
