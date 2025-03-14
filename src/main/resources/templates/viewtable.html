@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns:th = "http://www.thymeleaf.org">
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>People database</title>
+
+
+</head>
+<body>
+<h1>People database</h1>
+<a href="/add"><button type="button">Add person</button></a>
+<a href="/delete"><button type="button">Delete person</button></a>
+<a href="/login"><button type="button">Log out</button></a>
+
+<table border="1">
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>First Name</th>
+        <th>Last Name</th>
+        <th>Age</th>
+        <th>Email</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="pers : ${person}">
+        <td th:text="${pers.id}"></td>
+        <td th:text="${pers.firstName}"></td>
+        <td th:text="${pers.lastName}"></td>
+        <td th:text="${pers.age}"></td>
+        <td th:text="${pers.email}"></td>
+        <td>
+            <a th:href="@{/update/{id}(id=${pers.id})}"><button type="button">Update</button></a>
+        </td>
+    </tr>
+    </tbody>
+</table>
+</body>
+</html>
