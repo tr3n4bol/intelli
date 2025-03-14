@@ -1,18 +1,81 @@
 <!DOCTYPE html>
-<html xmlns:th = "http://www.thymeleaf.org">
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>People database</title>
+    <style>
+        /* Основные стили для центрирования и красивого отображения */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 2rem;
+        }
 
+        h1 {
+            text-align: center;
+            color: #333;
+        }
 
+        .button-container {
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+
+        button {
+            padding: 0.75rem 1.5rem;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 1rem;
+            cursor: pointer;
+            margin: 0.5rem;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 0 auto;
+            background: white;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #007bff;
+            color: white;
+        }
+
+        tr:hover {
+            background-color: #f1f1f1;
+        }
+
+        a button {
+            background-color: #28a745;
+        }
+
+        a button:hover {
+            background-color: #218838;
+        }
+    </style>
 </head>
 <body>
 <h1>People database</h1>
-<a href="/add"><button type="button">Add person</button></a>
-<a href="/delete"><button type="button">Delete person</button></a>
-<a href="/login"><button type="button">Log out</button></a>
-
+<div class="button-container">
+    <a href="/add"><button type="button">Add person</button></a>
+    <a href="/delete"><button type="button">Delete person</button></a>
+    <a href="/login"><button type="button">Log out</button></a>
+</div>
 <table border="1">
     <thead>
     <tr>
@@ -21,6 +84,7 @@
         <th>Last Name</th>
         <th>Age</th>
         <th>Email</th>
+        <th>Actions</th>
     </tr>
     </thead>
     <tbody>
