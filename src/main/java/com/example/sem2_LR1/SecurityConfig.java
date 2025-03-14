@@ -12,18 +12,20 @@ import org.springframework.security.web.SecurityFilterChain;
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/", "/register", "/login").permitAll() // Разрешаем доступ к регистрации и статическим ресурсам
-                        .requestMatchers("/add", "/delete", "/update/1").hasRole("ADMIN") // Только администратор может добавлять, удалять и редактировать
+                        .requestMatchers("/", "/home", "/login", "/register").permitAll() // Доступ всем
+                        .requestMatchers("/add", "/delete", "/update/**").hasRole("ADMIN") // Только для ADMIN
+                        .requestMatchers("/view").hasAnyRole("USER", "ADMIN") // Для USER и ADMIN
                         .anyRequest().authenticated() // Все остальные запросы требуют аутентификации
                 )
                 .formLogin(form -> form
                         .loginPage("/login") // Страница входа
-                        .defaultSuccessUrl("/view", true)
-                        .permitAll() // Разрешаем доступ к странице входа всем
+                        .defaultSuccessUrl("/view") // Перенаправление после успешного входа
+                        .permitAll()
                 )
                 .logout(logout -> logout
                         .logoutSuccessUrl("/login") // Перенаправление после выхода

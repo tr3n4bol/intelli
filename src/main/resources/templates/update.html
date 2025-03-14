@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
     <title>Update person</title>
     <style>
-        /* Основные стили для центрирования и красивого отображения */
         body {
             display: flex;
             justify-content: center;
@@ -74,23 +74,28 @@
 <body>
 <div class="update-container">
     <h1>Update person's info</h1>
-    <form action="#" th:action="@{/update}" th:object="${person}" method="post">
-        <input type="hidden" th:field="*{id}" /> <!-- Скрытое поле для ID -->
+    <div sec:authorize="hasRole('ADMIN')">
+        <form action="#" th:action="@{/update}" th:object="${person}" method="post">
+            <input type="hidden" th:field="*{id}" /> <!-- Скрытое поле для ID -->
 
-        <label for="firstName">First Name:</label>
-        <input type="text" id="firstName" name="firstName" th:field="*{firstName}" placeholder="Leave blank to keep current value"><br><br>
+            <label for="firstName">First Name:</label>
+            <input type="text" id="firstName" name="firstName" th:field="*{firstName}" placeholder="Leave blank to keep current value"><br><br>
 
-        <label for="lastName">Last Name:</label>
-        <input type="text" id="lastName" name="lastName" th:field="*{lastName}" placeholder="Leave blank to keep current value"><br><br>
+            <label for="lastName">Last Name:</label>
+            <input type="text" id="lastName" name="lastName" th:field="*{lastName}" placeholder="Leave blank to keep current value"><br><br>
 
-        <label for="age">Age:</label>
-        <input type="number" id="age" name="age" th:field="*{age}" placeholder="Leave blank to keep current value"><br><br>
+            <label for="age">Age:</label>
+            <input type="number" id="age" name="age" th:field="*{age}" placeholder="Leave blank to keep current value"><br><br>
 
-        <label for="email">Email:</label>
-        <input type="email" id="email" name="email" th:field="*{email}" placeholder="Leave blank to keep current value"><br><br>
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" th:field="*{email}" placeholder="Leave blank to keep current value"><br><br>
 
-        <button type="submit">Save Changes</button>
-    </form>
+            <button type="submit">Save Changes</button>
+        </form>
+    </div>
+    <div sec:authorize="!hasRole('ADMIN')">
+        <p style="color: red;">You do not have permission to update records.</p>
+    </div>
     <a href="/view"><button type="button">Back</button></a>
 </div>
 </body>

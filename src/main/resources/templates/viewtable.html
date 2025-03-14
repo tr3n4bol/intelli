@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
     <title>People database</title>
     <style>
-        /* Основные стили для центрирования и красивого отображения */
         body {
             font-family: Arial, sans-serif;
             background-color: #f4f4f9;
@@ -72,8 +72,10 @@
 <body>
 <h1>People database</h1>
 <div class="button-container">
-    <a href="/add"><button type="button">Add person</button></a>
-    <a href="/delete"><button type="button">Delete person</button></a>
+    <div sec:authorize="hasRole('ADMIN')">
+        <a href="/add"><button type="button">Add person</button></a>
+        <a href="/delete"><button type="button">Delete person</button></a>
+    </div>
     <a href="/login"><button type="button">Log out</button></a>
 </div>
 <table border="1">
@@ -84,7 +86,7 @@
         <th>Last Name</th>
         <th>Age</th>
         <th>Email</th>
-        <th>Actions</th>
+        <th sec:authorize="hasRole('ADMIN')">Actions</th>
     </tr>
     </thead>
     <tbody>
@@ -94,7 +96,7 @@
         <td th:text="${pers.lastName}"></td>
         <td th:text="${pers.age}"></td>
         <td th:text="${pers.email}"></td>
-        <td>
+        <td sec:authorize="hasRole('ADMIN')">
             <a th:href="@{/update/{id}(id=${pers.id})}"><button type="button">Update</button></a>
         </td>
     </tr>
