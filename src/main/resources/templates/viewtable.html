@@ -67,14 +67,49 @@
         a button:hover {
             background-color: #218838;
         }
+
+        /* Стили для модальных окон */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+
+        .modal-content {
+            background-color: white;
+            margin: 10% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            border-radius: 8px;
+            width: 300px;
+            text-align: center;
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .close:hover {
+            color: black;
+        }
     </style>
 </head>
 <body>
 <h1>People database</h1>
 <div class="button-container">
     <div sec:authorize="hasRole('ADMIN')">
-        <a href="/add"><button type="button">Add person</button></a>
-        <a href="/delete"><button type="button">Delete person</button></a>
+        <button onclick="openAddModal()">Add person</button>
+        <button onclick="openDeleteModal()">Delete person</button>
     </div>
     <a href="/login"><button type="button">Log out</button></a>
 </div>
@@ -102,5 +137,83 @@
     </tr>
     </tbody>
 </table>
+
+<!-- Модальное окно для добавления пользователя -->
+<div id="addModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeAddModal()">&times;</span>
+        <h2>Add new person</h2>
+        <form id="addForm" action="#" th:action="@{/add}" th:object="${people}" method="post">
+            <label for="firstName">First Name:</label>
+            <input type="text" id="firstName" name="firstName" th:field="*{firstName}" required><br><br>
+
+            <label for="lastName">Last Name:</label>
+            <input type="text" id="lastName" name="lastName" th:field="*{lastName}" required><br><br>
+
+            <label for="age">Age:</label>
+            <input type="number" id="age" name="age" th:field="*{age}" required><br><br>
+
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" th:field="*{email}" required><br><br>
+
+            <button type="submit">Add Person</button>
+        </form>
+        <button onclick="closeAddModal()">Back</button>
+    </div>
+</div>
+
+<!-- Модальное окно для удаления пользователя -->
+<div id="deleteModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeDeleteModal()">&times;</span>
+        <h2>Delete person</h2>
+        <form id="deleteForm" action="#" th:action="@{/delete}" method="post">
+            <label for="id">ID:</label>
+            <input type="number" id="id" name="id" required><br><br>
+
+            <button type="submit">Delete Person</button>
+        </form>
+        <button onclick="closeDeleteModal()">Back</button>
+    </div>
+</div>
+
+<script>
+    // Функции для открытия и закрытия модальных окон
+    function openAddModal() {
+        document.getElementById("addModal").style.display = "block";
+    }
+
+    function closeAddModal() {
+        document.getElementById("addModal").style.display = "none";
+    }
+
+    function openDeleteModal() {
+        document.getElementById("deleteModal").style.display = "block";
+    }
+
+    function closeDeleteModal() {
+        document.getElementById("deleteModal").style.display = "none";
+    }
+
+    // Закрытие модального окна при клике вне его
+    window.onclick = function(event) {
+        if (event.target.classList.contains('modal')) {
+            event.target.style.display = "none";
+        }
+    }
+
+    // Закрытие модального окна после успешной отправки формы
+    document.getElementById("addForm").addEventListener("submit", function() {
+        setTimeout(function() {
+            closeAddModal();
+        }, 100); // Небольшая задержка для закрытия окна после отправки
+    });
+
+    document.getElementById("deleteForm").addEventListener("submit", function() {
+        setTimeout(function() {
+            closeDeleteModal();
+        }, 100); // Небольшая задержка для закрытия окна после отправки
+    });
+</script>
 </body>
 </html>

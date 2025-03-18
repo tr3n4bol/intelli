@@ -15,16 +15,11 @@ public class TableController {
     private peopleRepository peopleRepo;
 
     @GetMapping("/view")
-    String peoplelist(Model model) {
-        List<People> person = peopleRepo.findAll(Sort.by(Sort.Direction.ASC, "id"));
+    public String viewTable(Model model) {
+        List<People> person = peopleRepo.findAll();
         model.addAttribute("person", person);
+        model.addAttribute("people", new People()); // Для формы добавления
         return "viewtable";
-    }
-
-    @GetMapping("/add")
-    public String addPerson(Model model) {
-        model.addAttribute("people", new People());
-        return "add_person";
     }
 
     @PostMapping("/add")
@@ -32,6 +27,13 @@ public class TableController {
         peopleRepo.save(people);
         return "redirect:/view";
     }
+
+    @PostMapping("/delete")
+    public String deletePerson(@RequestParam Long id) {
+        peopleRepo.deleteById(id);
+        return "redirect:/view";
+    }
+
 
     @GetMapping("/update/{id}")
     public String showUpdateForm(@PathVariable Long id, Model model) {
@@ -66,12 +68,6 @@ public class TableController {
     @GetMapping("/delete")
     public String deletePerson(Model model) {
         return "delete_person";
-    }
-
-    @PostMapping("/delete")
-    public String deletePerson(@RequestParam Long id) {
-        peopleRepo.deleteById(id);
-        return "redirect:/view";
     }
 
 }
