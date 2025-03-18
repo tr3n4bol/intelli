@@ -22,6 +22,18 @@ public class TableController {
         return "viewtable";
     }
 
+
+    @Autowired
+    private UserRepository userRepo; // Репозиторий для работы с пользователями
+
+    @GetMapping("/users")
+    public String viewUsers(Model model) {
+        List<User> users = userRepo.findAll();
+        model.addAttribute("users", users);
+        return "users";
+    }
+
+
     @PostMapping("/add")
     public String addPerson(@ModelAttribute("people") People people) {
         peopleRepo.save(people);
