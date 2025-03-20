@@ -3,7 +3,7 @@
       xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
-    <title>People database</title>
+    <title>Are you sure?</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -61,11 +61,11 @@
         }
 
         a button {
-            background-color: #28a745;
+            background-color: #007bff;
         }
 
         a button:hover {
-            background-color: #218838;
+            background-color: #0056b3;
         }
 
         /* Стили для модальных окон */
@@ -105,14 +105,14 @@
     </style>
 </head>
 <body>
-<h1>People database</h1>
+<h1>Are you sure?</h1>
 <div class="button-container">
     <div sec:authorize="hasRole('ADMIN')">
         <button onclick="openAddModal()">Add person</button>
         <button onclick="openDeleteModal()">Delete person</button>
         <a href="/users"><button type="button">View Users</button></a>
     </div>
-    <a href="/login"><button type="button">Log out</button></a>
+    <a href="/"><button type="button">Log out</button></a>
 </div>
 <table border="1">
     <thead>
@@ -133,7 +133,7 @@
         <td th:text="${pers.age}"></td>
         <td th:text="${pers.email}"></td>
         <td sec:authorize="hasRole('ADMIN')">
-            <a th:href="@{/update/{id}(id=${pers.id})}"><button type="button">Update</button></a>
+            <a th:href="@{/update/{id}(id=${pers.id})}"><button type="button">edit</button></a>
         </td>
     </tr>
     </tbody>

@@ -23,12 +23,12 @@ public class SecurityConfig {
                         .anyRequest().authenticated() // Все остальные запросы требуют аутентификации
                 )
                 .formLogin(form -> form
-                        .loginPage("/login") // Страница входа
+                        .loginPage("/") // Страница входа
                         .defaultSuccessUrl("/view") // Перенаправление после успешного входа
                         .permitAll()
                 )
                 .logout(logout -> logout
-                        .logoutSuccessUrl("/login") // Перенаправление после выхода
+                        .logoutSuccessUrl("/") // Перенаправление после выхода
                         .permitAll()
                 );
         return http.build();
