@@ -17,14 +17,13 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/", "/home", "/login", "/register").permitAll() // Доступ всем
-                        .requestMatchers("/add", "/delete", "/update/**").hasRole("ADMIN") // Только для ADMIN
-                        .requestMatchers("/view").hasAnyRole("USER", "ADMIN") // Для USER и ADMIN
+                        .requestMatchers("/", "/home", "/register").permitAll() // Доступ всем
+                        .requestMatchers("/converter", "/convert").authenticated()
                         .anyRequest().authenticated() // Все остальные запросы требуют аутентификации
                 )
                 .formLogin(form -> form
                         .loginPage("/") // Страница входа
-                        .defaultSuccessUrl("/view") // Перенаправление после успешного входа
+                        .defaultSuccessUrl("/converter") // Перенаправление после успешного входа
                         .permitAll()
                 )
                 .logout(logout -> logout

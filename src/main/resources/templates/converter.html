@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Currency Converter</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 2rem;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+
+        .converter-form {
+            max-width: 400px;
+            margin: 0 auto;
+            background: white;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #555;
+        }
+
+        input[type="text"],
+        input[type="number"],
+        select {
+            width: 100%;
+            padding: 0.5rem;
+            margin-bottom: 1rem;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 1rem;
+        }
+
+        button {
+            width: 100%;
+            padding: 0.75rem;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 1rem;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #218838;
+        }
+
+        .error-message {
+            color: red;
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+
+        .operations-table {
+            margin-top: 2rem;
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .operations-table th,
+        .operations-table td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .operations-table th {
+            background-color: #007bff;
+            color: white;
+        }
+
+        .operations-table tr:hover {
+            background-color: #f1f1f1;
+        }
+    </style>
+</head>
+<body>
+<h1>Currency Converter</h1>
+<div class="converter-form">
+    <form action="/convert" method="post">
+        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+
+        <label for="fromCurrency">From Currency:</label>
+        <select id="fromCurrency" name="fromCurrency" required>
+            <option value="">Select a currency</option>
+            <option th:each="currency : ${currencies}" th:value="${currency}" th:text="${currency}"></option>
+        </select>
+
+        <label for="toCurrency">To Currency:</label>
+        <select id="toCurrency" name="toCurrency" required>
+            <option value="">Select a currency</option>
+            <option th:each="currency : ${currencies}" th:value="${currency}" th:text="${currency}"></option>
+        </select>
+
+        <label for="amount">Amount:</label>
+        <input type="number" id="amount" name="amount" step="0.01" required>
+
+        <button type="submit">Convert</button>
+    </form>
+    <p th:if="${error}" th:text="${error}" class="error-message"></p>
+</div>
+
+<h2>Conversion History</h2>
+<table class="operations-table">
+    <thead>
+    <tr>
+        <th>From Currency</th>
+        <th>To Currency</th>
+        <th>Amount</th>
+        <th>Converted Amount</th>
+        <th>Timestamp</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="operation : ${operations}">
+        <td th:text="${operation.fromCurrency}"></td>
+        <td th:text="${operation.toCurrency}"></td>
+        <td th:text="${operation.amount}"></td>
+        <td th:text="${operation.convertedAmount}"></td>
+        <td th:text="${operation.timestamp}"></td>
+    </tr>
+    </tbody>
+</table>
+</body>
+</html>
