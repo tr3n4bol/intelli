@@ -31,7 +31,7 @@ public class CurrencyConverterController {
         // Получаем историю операций для текущего пользователя
         model.addAttribute("operations", conversionOperationRepository.findByUsername(username));
 
-        // Получаем уникальные валюты из таблицы exchange_rates
+        // Получаем все уникальные валюты из таблицы exchange_rates
         List<String> currencies = exchangeRateRepository.findAll().stream()
                 .flatMap(rate -> List.of(rate.getFromCurrency(), rate.getToCurrency()).stream())
                 .distinct()
@@ -55,9 +55,33 @@ public class CurrencyConverterController {
 
             // Получаем курс из базы данных
             ExchangeRate exchangeRate = exchangeRateRepository.findByFromCurrencyAndToCurrency(fromCurrency, toCurrency);
+
+            // Если курс не найден, проверяем обратный курс
             if (exchangeRate == null) {
-                model.addAttribute("error", "Exchange rate not found for the selected currencies.");
-                return "converter";
+                ExchangeRate reverseRate = exchangeRateRepository.findByFromCurrencyAndToCurrency(toCurrency, fromCurrency);
+                if (reverseRate != null) {
+                    // Вычисляем обратный курс
+                    exchangeRate = new ExchangeRate();
+                    exchangeRate.setFromCurrency(fromCurrency);
+                    exchangeRate.setToCurrency(toCurrency);
+                    exchangeRate.setRate(1.0 / reverseRate.getRate());
+                } else {
+                    // Если ни прямой, ни обратный курс не найден, возвращаем ошибку
+
+                    // Получаем список операций для текущего пользователя
+                    List<ConversionOperation> operations = conversionOperationRepository.findByUsername(username);
+                    model.addAttribute("operations", operations);
+
+                    // Получаем список валют
+                    List<String> currencies = exchangeRateRepository.findAll().stream()
+                            .flatMap(rate -> List.of(rate.getFromCurrency(), rate.getToCurrency()).stream())
+                            .distinct()
+                            .collect(Collectors.toList());
+                    model.addAttribute("currencies", currencies);
+
+                    model.addAttribute("error", "Exchange rate not found for the selected currencies.");
+                    return "converter";
+                }
             }
 
             // Выполняем конвертацию
@@ -78,6 +102,22 @@ public class CurrencyConverterController {
         } catch (Exception e) {
             // Логируем ошибку
             e.printStackTrace();
+
+            // Получаем имя текущего пользователя
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            String username = authentication.getName();
+
+            // Получаем список операций для текущего пользователя
+            List<ConversionOperation> operations = conversionOperationRepository.findByUsername(username);
+            model.addAttribute("operations", operations);
+
+            // Получаем список валют
+            List<String> currencies = exchangeRateRepository.findAll().stream()
+                    .flatMap(rate -> List.of(rate.getFromCurrency(), rate.getToCurrency()).stream())
+                    .distinct()
+                    .collect(Collectors.toList());
+            model.addAttribute("currencies", currencies);
+
             model.addAttribute("error", "An error occurred during conversion.");
             return "converter";
         }
