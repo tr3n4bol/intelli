@@ -52,8 +52,10 @@
         }
 
         th, td {
+            font-size: 20px;
             padding: 12px;
-            text-align: left;
+            text-align: center;
+            vertical-align: middle;
             border-bottom: 1px solid #ddd;
         }
 
@@ -86,6 +88,26 @@
             transform: scale(0.95);
         }
 
+        .view-history-button{
+            padding: 0.5rem 1rem;
+            background-color: #dc3545;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+
+        .view-history-button:hover {
+            background-color: #c82333;
+            transform: scale(1.05);
+        }
+
+        .view-history-button button{
+            transform: scale(0.95);
+        }
+
         td.actions {
             text-align: center;
         }
@@ -112,6 +134,9 @@
             <form th:action="@{/deleteUser/{id}(id=${user.id})}" method="post" style="display: inline;">
                 <button type="submit" class="delete-button">Delete</button>
             </form>
+            <a th:href="@{/view-history/{username}(username=${user.username}, source='users')}">
+                <button class="view-history-button">View History</button>
+            </a>
         </td>
     </tr>
     </tbody>

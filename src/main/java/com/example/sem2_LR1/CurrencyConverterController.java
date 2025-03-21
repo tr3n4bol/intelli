@@ -28,10 +28,15 @@ public class CurrencyConverterController {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String username = authentication.getName();
 
-        // Получаем историю операций для текущего пользователя
-        model.addAttribute("operations", conversionOperationRepository.findByUsername(username));
+        List<ConversionOperation> operations = conversionOperationRepository
+                .findByUsernameOrderByTimestampDesc(username) // Сортируем по времени в порядке убывания
+                .stream()
+                .limit(4) // Ограничиваем до 4 записей
+                .collect(Collectors.toList());
 
-        // Получаем все уникальные валюты из таблицы exchange_rates
+        model.addAttribute("operations", operations);
+        model.addAttribute("username", username);
+
         List<String> currencies = exchangeRateRepository.findAll().stream()
                 .flatMap(rate -> List.of(rate.getFromCurrency(), rate.getToCurrency()).stream())
                 .distinct()
@@ -69,7 +74,7 @@ public class CurrencyConverterController {
                     // Если ни прямой, ни обратный курс не найден, возвращаем ошибку
 
                     // Получаем список операций для текущего пользователя
-                    List<ConversionOperation> operations = conversionOperationRepository.findByUsername(username);
+                    List<ConversionOperation> operations = conversionOperationRepository.findByUsernameOrderByTimestampDesc(username);
                     model.addAttribute("operations", operations);
 
                     // Получаем список валют
@@ -108,7 +113,7 @@ public class CurrencyConverterController {
             String username = authentication.getName();
 
             // Получаем список операций для текущего пользователя
-            List<ConversionOperation> operations = conversionOperationRepository.findByUsername(username);
+            List<ConversionOperation> operations = conversionOperationRepository.findByUsernameOrderByTimestampDesc(username);
             model.addAttribute("operations", operations);
 
             // Получаем список валют

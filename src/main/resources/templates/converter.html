@@ -88,40 +88,52 @@
             background-color: #f1f1f1;
         }
 
-        .logout-button {
-            position: absolute;
-            top: 1rem;
-            right: 1rem;
-            background-color: #dc3545; /* Красный цвет для кнопки Log Out */
+        .button-container {
+            position: fixed; /* Фиксированное позиционирование */
+            top: 1rem; /* Отступ сверху */
+            right: 1rem; /* Отступ справа */
+            display: flex;
+            flex-direction: column; /* Кнопки располагаются вертикально */
+            gap: 0.5rem; /* Отступ между кнопками */
         }
 
-        .logout-button:hover {
-            background-color: #c82333; /* Темнее красный при наведении */
+        .button-container button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            padding: 0.5rem 1rem;
+            font-size: 0.9rem;
+            cursor: pointer;
+            text-align: center;
         }
 
-        .view-users-button {
-            position: absolute;
-            top: 4rem; /* Расположение под кнопкой Log Out */
-            right: 1rem;
-            background-color: #17a2b8; /* Голубой цвет для кнопки View Users */
+        .button-container button:hover {
+            opacity: 0.9; /* Эффект при наведении */
         }
 
-        .view-users-button:hover {
-            background-color: #138496; /* Темнее голубой при наведении */
+        .button-container button.logout-button{
+            background-color: #dc3545;;
         }
+
     </style>
 </head>
 <body>
-<form th:action="@{/logout}" method="post" class="logout-button">
-    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
-    <button type="submit">Log Out</button>
-</form>
-
-<div sec:authorize="hasRole('ADMIN')">
-<a th:href="@{/users}" class="view-users-button">
-    <button type="button">View Users</button>
-</a>
+<div class="button-container">
+    <form th:action="@{/logout}" method="post">
+        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+        <button type="submit" class="logout-button">Log Out</button>
+    </form>
+    <a th:href="@{/view-history/{username}(username=${username}, source='converter')}">
+        <button class="view-history-button">View History</button>
+    </a>
+    <div sec:authorize="hasRole('ADMIN')">
+        <a th:href="@{/users}">
+            <button class="view-users-button">View Users</button>
+        </a>
+    </div>
 </div>
+
 <h1>Currency Converter</h1>
 <div class="converter-form">
     <form action="/convert" method="post">
