@@ -137,6 +137,10 @@
             <a th:href="@{/view-history/{username}(username=${user.username}, source='users')}">
                 <button class="view-history-button">View History</button>
             </a>
+            <form th:action="@{/switch-role/{username}(username=${user.username})}" method="post">
+<!--                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />-->
+                <button type="submit">Switch Role</button>
+            </form>
         </td>
     </tr>
     </tbody>

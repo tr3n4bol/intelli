@@ -22,12 +22,6 @@ public class TableController {
         return "viewtable";
     }
 
-    @PostMapping("/deleteUser/{id}")
-    public String deleteUser(@PathVariable Long id) {
-        userRepo.deleteById(id);
-        return "redirect:/users"; // Перенаправление обратно на страницу пользователей
-    }
-
     @Autowired
     private UserRepository userRepo; // Репозиторий для работы с пользователями
 
@@ -80,11 +74,6 @@ public class TableController {
 
         peopleRepo.save(existingPerson);
         return "redirect:/view";
-    }
-
-    @GetMapping("/delete")
-    public String deletePerson(Model model) {
-        return "delete_person";
     }
 
 }

@@ -8,6 +8,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 @Configuration
 @EnableWebSecurity
@@ -17,21 +18,35 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/", "/home", "/register").permitAll() // Доступ всем
+                        .requestMatchers("/", "/home", "/register").permitAll()
                         .requestMatchers("/converter", "/convert").authenticated()
                         .requestMatchers("/users","/user-history").hasAnyRole("ADMIN")
-                        .anyRequest().authenticated() // Все остальные запросы требуют аутентификации
+                        .anyRequest().authenticated()
                 )
                 .formLogin(form -> form
-                        .loginPage("/") // Страница входа
-                        .defaultSuccessUrl("/converter") // Перенаправление после успешного входа
+                        .loginPage("/")
+                        .defaultSuccessUrl("/converter")
                         .permitAll()
                 )
                 .logout(logout -> logout
-                        .logoutSuccessUrl("/") // Перенаправление после выхода
+                        .logoutSuccessUrl("/")
                         .permitAll()
                 );
         return http.build();
+    }
+
+    @Bean
+    public UserDetailsService userDetailsService(UserRepository userRepository) {
+        return username -> {
+            User user = userRepository.findByUsername(username)
+                    .orElseThrow(() -> new UsernameNotFoundException("User not found: " + username));
+
+            return org.springframework.security.core.userdetails.User
+                    .withUsername(user.getUsername())
+                    .password(user.getPassword())
+                    .roles(user.getRole())
+                    .build();
+        };
     }
 
     @Bean

@@ -13,7 +13,7 @@ import java.util.Set;
 public class User {
     public User() {}
 
-    public User(String username, String password, Set<String> role) {
+    public User(String username, String password, String role) {
         this.username = username;
         this.password = password;
         this.role = role;
@@ -31,9 +31,8 @@ public class User {
     @Column(name = "password", nullable = false)
     private String password;
 
-    @ElementCollection(fetch = FetchType.EAGER)
-    //@Column(name = "role", nullable = false)
-    private Set<String> role;
+    @Column(name = "role", nullable = false)
+    private String role;
 
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
@@ -44,8 +43,8 @@ public class User {
     public String getPassword() { return password; }
     public void setPassword(String password) { this.password = password; }
 
-    public Set<String> getRole() { return role; }
-    public void setRole(Set<String> role) { this.role = role; }
+    public String getRole() { return role; }
+    public void setRole(String role) { this.role = role; }
 
 
 }
