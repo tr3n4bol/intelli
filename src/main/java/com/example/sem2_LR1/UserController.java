@@ -23,6 +23,9 @@ public class UserController {
     @Autowired
     private ConversionOperationRepository conversionOperationRepository;
 
+    @Autowired
+    private OhmCalculationRepository OhmCalculationRepository;
+
     @PostMapping("/deleteUser/{id}")
     public String deleteUser(@PathVariable Long id) {
         userRepository.deleteById(id);
@@ -45,8 +48,11 @@ public class UserController {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String currentUsername = authentication.getName();
 
-        List<ConversionOperation> operations = conversionOperationRepository.findByUsernameOrderByTimestampDesc(username);
-        model.addAttribute("operations", operations);
+        List<ConversionOperation> operations_curr = conversionOperationRepository.findByUsernameOrderByTimestampDesc(username);
+        List<OhmCalculation> operations_ohm = OhmCalculationRepository.findByUsernameOrderByTimestampDesc(username);
+
+        model.addAttribute("operations_curr", operations_curr);
+        model.addAttribute("operations_ohm", operations_ohm);
         model.addAttribute("username", username);
         model.addAttribute("source", source);
 
