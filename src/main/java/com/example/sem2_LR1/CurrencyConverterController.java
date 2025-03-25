@@ -24,14 +24,13 @@ public class CurrencyConverterController {
 
     @GetMapping("/converter")
     public String showConverter(Model model) {
-        // Получаем имя текущего пользователя
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String username = authentication.getName();
 
         List<ConversionOperation> operations = conversionOperationRepository
-                .findByUsernameOrderByTimestampDesc(username) // Сортируем по времени в порядке убывания
+                .findByUsernameOrderByTimestampDesc(username)
                 .stream()
-                .limit(4) // Ограничиваем до 4 записей
+                .limit(4)
                 .collect(Collectors.toList());
 
         model.addAttribute("operations", operations);
@@ -54,30 +53,21 @@ public class CurrencyConverterController {
             Model model) {
 
         try {
-            // Получаем имя текущего пользователя
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
             String username = authentication.getName();
 
-            // Получаем курс из базы данных
             ExchangeRate exchangeRate = exchangeRateRepository.findByFromCurrencyAndToCurrency(fromCurrency, toCurrency);
 
-            // Если курс не найден, проверяем обратный курс
             if (exchangeRate == null) {
                 ExchangeRate reverseRate = exchangeRateRepository.findByFromCurrencyAndToCurrency(toCurrency, fromCurrency);
                 if (reverseRate != null) {
-                    // Вычисляем обратный курс
                     exchangeRate = new ExchangeRate();
                     exchangeRate.setFromCurrency(fromCurrency);
                     exchangeRate.setToCurrency(toCurrency);
                     exchangeRate.setRate(1.0 / reverseRate.getRate());
                 } else {
-                    // Если ни прямой, ни обратный курс не найден, возвращаем ошибку
-
-                    // Получаем список операций для текущего пользователя
                     List<ConversionOperation> operations = conversionOperationRepository.findByUsernameOrderByTimestampDesc(username);
                     model.addAttribute("operations", operations);
-
-                    // Получаем список валют
                     List<String> currencies = exchangeRateRepository.findAll().stream()
                             .flatMap(rate -> List.of(rate.getFromCurrency(), rate.getToCurrency()).stream())
                             .distinct()
@@ -89,10 +79,8 @@ public class CurrencyConverterController {
                 }
             }
 
-            // Выполняем конвертацию
             double convertedAmount = amount * exchangeRate.getRate();
 
-            // Сохраняем операцию в базу данных
             ConversionOperation operation = new ConversionOperation();
             operation.setUsername(username);
             operation.setFromCurrency(fromCurrency);
@@ -102,21 +90,16 @@ public class CurrencyConverterController {
             operation.setTimestamp(LocalDateTime.now());
             conversionOperationRepository.save(operation);
 
-            // Возвращаемся на страницу конвертера
             return "redirect:/converter";
         } catch (Exception e) {
-            // Логируем ошибку
             e.printStackTrace();
 
-            // Получаем имя текущего пользователя
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
             String username = authentication.getName();
 
-            // Получаем список операций для текущего пользователя
             List<ConversionOperation> operations = conversionOperationRepository.findByUsernameOrderByTimestampDesc(username);
             model.addAttribute("operations", operations);
 
-            // Получаем список валют
             List<String> currencies = exchangeRateRepository.findAll().stream()
                     .flatMap(rate -> List.of(rate.getFromCurrency(), rate.getToCurrency()).stream())
                     .distinct()

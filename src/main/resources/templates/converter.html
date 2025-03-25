@@ -132,6 +132,10 @@
             <button class="view-users-button">View Users</button>
         </a>
     </div>
+    <div sec:authorize="hasRole('ADMIN')" style="margin-top: 20px;">
+        <a href="/add-exchange-rate"><button>Add Exchange Rate</button></a>
+    </div>
+    <a href="/ohm-calculator"><button>Калькулятор Ома</button></a>
 </div>
 
 <h1>Currency Converter</h1>

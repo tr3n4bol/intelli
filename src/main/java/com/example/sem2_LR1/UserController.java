@@ -5,10 +5,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.HashSet;
 import java.util.List;
@@ -19,6 +16,9 @@ public class UserController {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private ExchangeRateRepository exchangeRateRepository;
 
     @Autowired
     private ConversionOperationRepository conversionOperationRepository;
@@ -54,10 +54,15 @@ public class UserController {
     }
 
     @PostMapping("/switch-role/{username}")
-    public String switchUserRole(@PathVariable String username) {
+    public String switchUserRole(@PathVariable String username, Authentication authentication) {
+        String currentUsername = authentication.getName();
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new IllegalArgumentException("User not found: " + username));
 
+
+        if (currentUsername.equals(username)) {
+            return "redirect:/users";
+        }
         if (user.getRole().equals("USER")) {
             user.setRole("ADMIN");
         } else {
@@ -67,6 +72,26 @@ public class UserController {
         userRepository.save(user);
 
         return "redirect:/users";
+    }
+
+    @GetMapping("/add-exchange-rate")
+    public String showAddExchangeRateForm(Model model) {
+
+        model.addAttribute("exchangeRate", new ExchangeRate());
+        return "add-exchange-rate";
+    }
+
+    @PostMapping("/add-exchange-rate")
+    public String addExchangeRate(@ModelAttribute ExchangeRate exchangeRate, Model model) {
+        if (exchangeRateRepository.findByFromCurrencyAndToCurrency(
+                exchangeRate.getFromCurrency(),
+                exchangeRate.getToCurrency()) != null) {
+            model.addAttribute("error", "Exchange rate already exists");
+            return "add-exchange-rate";
+        }
+
+        exchangeRateRepository.save(exchangeRate);
+        return "redirect:/converter";
     }
 
 }

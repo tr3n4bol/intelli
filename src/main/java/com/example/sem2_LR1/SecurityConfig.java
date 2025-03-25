@@ -20,7 +20,10 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/", "/home", "/register").permitAll()
                         .requestMatchers("/converter", "/convert").authenticated()
-                        .requestMatchers("/users","/user-history").hasAnyRole("ADMIN")
+                        .requestMatchers(
+                                "/users",
+                                "/user-history",
+                                "/add-exchange-rate").hasAnyRole("ADMIN")
                         .anyRequest().authenticated()
                 )
                 .formLogin(form -> form

@@ -10,15 +10,14 @@ public class ExchangeRate {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "from_currency") // Указываем имя столбца в базе данных
+    @Column(name = "from_currency")
     private String fromCurrency;
 
-    @Column(name = "to_currency") // Указываем имя столбца в базе данных
+    @Column(name = "to_currency")
     private String toCurrency;
 
     private double rate;
 
-    // Геттеры и сеттеры
     public Long getId() {
         return id;
     }
