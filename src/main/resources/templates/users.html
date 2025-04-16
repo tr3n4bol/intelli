@@ -88,9 +88,29 @@
             transform: scale(0.95);
         }
 
-        .view-history-button{
+        .switch-button {
             padding: 0.5rem 1rem;
-            background-color: #dc3545;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+
+        .switch-button:hover {
+            background-color: #218838;
+            transform: scale(1.05);
+        }
+
+        .switch-button:active {
+            transform: scale(0.95);
+        }
+
+        .view-history-button {
+            padding: 0.5rem 1rem;
+            background-color: #17a2b8;
             color: white;
             border: none;
             border-radius: 4px;
@@ -100,16 +120,29 @@
         }
 
         .view-history-button:hover {
-            background-color: #c82333;
+            background-color: #138496;
             transform: scale(1.05);
         }
 
-        .view-history-button button{
+        .view-history-button:active {
             transform: scale(0.95);
         }
 
         td.actions {
             text-align: center;
+            padding: 8px; /* Уменьшил padding для ячейки */
+        }
+
+        .actions-container {
+            display: inline-flex; /* Изменил на inline-flex */
+            gap: 6px; /* Уменьшил промежуток между кнопками */
+            align-items: center;
+        }
+
+        .actions-container form,
+        .actions-container a {
+            margin: 0;
+            padding: 0;
         }
     </style>
 </head>
@@ -131,16 +164,17 @@
         <td th:text="${user.username}"></td>
         <td th:text="${user.role}"></td>
         <td class="actions">
-            <form th:action="@{/deleteUser/{id}(id=${user.id})}" method="post" style="display: inline;">
-                <button type="submit" class="delete-button">Delete</button>
-            </form>
-            <a th:href="@{/view-history/{username}(username=${user.username}, source='users')}">
-                <button class="view-history-button">View History</button>
-            </a>
-            <form th:action="@{/switch-role/{username}(username=${user.username})}" method="post">
-<!--                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />-->
-                <button type="submit">Switch Role</button>
-            </form>
+            <div class="actions-container">
+                <form th:action="@{/deleteUser/{id}(id=${user.id})}" method="post">
+                    <button type="submit" class="delete-button">Delete</button>
+                </form>
+                <a th:href="@{/view-history/{username}(username=${user.username}, source='users')}">
+                    <button class="view-history-button">View History</button>
+                </a>
+                <form th:action="@{/switch-role/{username}(username=${user.username})}" method="post">
+                    <button type="submit" class="switch-button">Switch Role</button>
+                </form>
+            </div>
         </td>
     </tr>
     </tbody>
