@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<VBox xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="org.example.demo.controllers.MainController"
+      spacing="20" alignment="CENTER" style="-fx-padding: 30;">
+    <Label text="Main Menu" style="-fx-font-size: 24; -fx-font-weight: bold;"/>
+
+    <VBox spacing="10" alignment="CENTER">
+        <Button text="Currency Converter" onAction="#handleCurrencyConverter"
+                style="-fx-font-size: 16; -fx-min-width: 200;"/>
+        <Button text="Ohm's Law Calculator" onAction="#handleOhmCalculator"
+                style="-fx-font-size: 16; -fx-min-width: 200;"/>
+    </VBox>
+
+    <Button text="Logout" onAction="#handleLogout" style="-fx-min-width: 100;"/>
+</VBox>

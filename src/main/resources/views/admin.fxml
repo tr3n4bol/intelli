@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<VBox xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="org.example.demo.controllers.AdminController"
+      spacing="15" style="-fx-padding: 20;">
+    <Label text="Admin Panel" style="-fx-font-size: 20; -fx-font-weight: bold;"/>
+
+    <TableView fx:id="usersTable">
+        <columns>
+            <TableColumn fx:id="usernameColumn" text="Username"/>
+            <TableColumn fx:id="roleColumn" text="Role"/>
+        </columns>
+    </TableView>
+
+    <HBox spacing="10">
+        <Button text="Switch Role" onAction="#handleSwitchRole"/>
+        <Button text="Delete User" onAction="#handleDeleteUser"/>
+    </HBox>
+
+    <HBox spacing="10">
+        <Button text="Back to Menu" onAction="#handleBackToMenu"/>
+        <Button text="Logout" onAction="#handleLogout"/>
+    </HBox>
+</VBox>
